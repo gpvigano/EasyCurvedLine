@@ -4,98 +4,100 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[RequireComponent( typeof(LineRenderer) )]
-public class CurvedLineRenderer : MonoBehaviour 
+namespace EasyCurvedLine
 {
-	//PUBLIC
-	public float lineSegmentSize = 0.15f;
-	public float lineWidth = 0.1f;
-    [Tooltip("Enable this to set a custom width for the line end")]
-	public bool useCustomEndWidth = false;
-    [Tooltip("Custom width for the line end")]
-	public float endWidth = 0.1f;
-	[Header("Gizmos")]
-	public bool showGizmos = true;
-	public float gizmoSize = 0.1f;
-	public Color gizmoColor = new Color(1,0,0,0.5f);
-	//PRIVATE
-	private CurvedLinePoint[] linePoints = new CurvedLinePoint[0];
-	private Vector3[] linePositions = new Vector3[0];
-	private Vector3[] linePositionsOld = new Vector3[0];
+    [RequireComponent(typeof(LineRenderer))]
+    public class CurvedLineRenderer : MonoBehaviour
+    {
+        public float lineSegmentSize = 0.15f;
+        public float lineWidth = 0.1f;
+        [Tooltip("Enable this to set a custom width for the line end")]
+        public bool useCustomEndWidth = false;
+        [Tooltip("Custom width for the line end")]
+        public float endWidth = 0.1f;
+        [Header("Gizmos")]
+        public bool showGizmos = true;
+        public float gizmoSize = 0.1f;
+        public Color gizmoColor = new Color(1, 0, 0, 0.5f);
 
-	// Update is called once per frame
-	public void Update () 
-	{
-		GetPoints();
-		SetPointsToLine();
-	}
+        private CurvedLinePoint[] linePoints = new CurvedLinePoint[0];
+        private Vector3[] linePositions = new Vector3[0];
+        private Vector3[] linePositionsOld = new Vector3[0];
 
-	void GetPoints()
-	{
-		//find curved points in children
-		linePoints = this.GetComponentsInChildren<CurvedLinePoint>();
+        // Update is called once per frame
+        public void Update()
+        {
+            GetPoints();
+            SetPointsToLine();
+        }
 
-		//add positions
-		linePositions = new Vector3[linePoints.Length];
-		for( int i = 0; i < linePoints.Length; i++ )
-		{
-			linePositions[i] = linePoints[i].transform.position;
-		}
-	}
+        private void GetPoints()
+        {
+            //find curved points in children
+            linePoints = this.GetComponentsInChildren<CurvedLinePoint>();
 
-	void SetPointsToLine()
-	{
-		//create old positions if they dont match
-		if( linePositionsOld.Length != linePositions.Length )
-		{
-			linePositionsOld = new Vector3[linePositions.Length];
-		}
+            //add positions
+            linePositions = new Vector3[linePoints.Length];
+            for (int i = 0; i < linePoints.Length; i++)
+            {
+                linePositions[i] = linePoints[i].transform.position;
+            }
+        }
 
-		//check if line points have moved
-		bool moved = false;
-		for( int i = 0; i < linePositions.Length; i++ )
-		{
-			//compare
-			if( linePositions[i] != linePositionsOld[i] )
-			{
-				moved = true;
-			}
-		}
+        private void SetPointsToLine()
+        {
+            //create old positions if they dont match
+            if (linePositionsOld.Length != linePositions.Length)
+            {
+                linePositionsOld = new Vector3[linePositions.Length];
+            }
 
-		//update if moved
-		if( moved == true )
-		{
-			LineRenderer line = this.GetComponent<LineRenderer>();
+            //check if line points have moved
+            bool moved = false;
+            for (int i = 0; i < linePositions.Length; i++)
+            {
+                //compare
+                if (linePositions[i] != linePositionsOld[i])
+                {
+                    moved = true;
+                }
+            }
 
-			//get smoothed values
-			Vector3[] smoothedPoints = LineSmoother.SmoothLine( linePositions, lineSegmentSize );
+            //update if moved
+            if (moved == true)
+            {
+                LineRenderer line = this.GetComponent<LineRenderer>();
 
-			//set line settings
-			line.positionCount = smoothedPoints.Length;
-			line.SetPositions( smoothedPoints );
-            line.startWidth = lineWidth;
-            line.endWidth = useCustomEndWidth ? endWidth : lineWidth;
-		}
-	}
+                //get smoothed values
+                Vector3[] smoothedPoints = LineSmoother.SmoothLine(linePositions, lineSegmentSize);
 
-	void OnDrawGizmosSelected()
-	{
-		Update();
-	}
+                //set line settings
+                line.positionCount = smoothedPoints.Length;
+                line.SetPositions(smoothedPoints);
+                line.startWidth = lineWidth;
+                line.endWidth = useCustomEndWidth ? endWidth : lineWidth;
+            }
+        }
 
-	void OnDrawGizmos()
-	{
-		if( linePoints.Length == 0 )
-		{
-			GetPoints();
-		}
+        private void OnDrawGizmosSelected()
+        {
+            Update();
+        }
 
-		//settings for gizmos
-		foreach( CurvedLinePoint linePoint in linePoints )
-		{
-			linePoint.showGizmo = showGizmos;
-			linePoint.gizmoSize = gizmoSize;
-			linePoint.gizmoColor = gizmoColor;
-		}
-	}
+        private void OnDrawGizmos()
+        {
+            if (linePoints.Length == 0)
+            {
+                GetPoints();
+            }
+
+            //settings for gizmos
+            foreach (CurvedLinePoint linePoint in linePoints)
+            {
+                linePoint.showGizmo = showGizmos;
+                linePoint.gizmoSize = gizmoSize;
+                linePoint.gizmoColor = gizmoColor;
+            }
+        }
+    }
 }

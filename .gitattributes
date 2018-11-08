@@ -1,4 +1,10 @@
 # .gitattributes
+*.cs linguist-language=C#
+*.cs linguist-detectable=true
+ProjectSettings/*.* linguist-detectable=false
+*.meta linguist-detectable=false
+*.mat linguist-detectable=false
+*.unity linguist-detectable=false
 
 # Treat them as binary files for GitMerge
 *.unity binary
