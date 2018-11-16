@@ -218,12 +218,12 @@ Here the type is `fix`, the scope is `Loader`, the subject is `65K mesh fully lo
 ## Adding features
 If you are going to add new scripts or implement new features please:
 * follow the existing folder structure:
-  * always put scripts in a `Scripts` folder or in a proper sub-folder
-  * put core scripts in `Assets/Scripts` and examples scripts in `Assets/Examples/Scripts`
-* if you add 3D models for testing
-  * put models used for testing in the `models` folder, outside the `Assets` folder
-    (otherwise Unity Editor will import them automatically)
-  * put models in the same folder only if they share materials and/or textures
+  * always put new assets in a proper sub-folder of `Assets/EasyCurvedLine/`
+  * always put scripts in a `Assets/EasyCurvedLine/Scripts` folder or in a proper sub-folder
+  * put core scripts in `Assets/EasyCurvedLine/Scripts` and examples scripts in `Assets/EasyCurvedLine/Examples/Scripts`
+  * put materials in `Assets/EasyCurvedLine/Materials`
+  * put textures in `Assets/EasyCurvedLine/Textures`
+
 
 ## Submitting Changes
   * Push your changes to your topic branch in your repository.
@@ -273,7 +273,7 @@ Here is a sample workflow with [SourceTree].
      * **Repository|Push...**
        * **Push to repository:** select **origin**
        * **Branches to push:** select your branch(e.g. `fix/suspended_on_focus_lost`)
-       * if you already pushed your commit to GitHub
+       * if amended latest commit and you already pushed your commit to GitHub
          (before your branch has been merged) you can check **Force Push**
          (to enable it select **Tools|Options|Git**,
          check **Enable Force Push**, leaving the option

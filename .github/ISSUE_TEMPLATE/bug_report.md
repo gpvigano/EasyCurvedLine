@@ -15,7 +15,7 @@ labels:
 **Environment**
 
 Please specify:
-* version of AsImpL (Github master commit hash or at least date/hour when you downloaded it)
+* version of EasyCurvedLine (Github master commit hash or at least date/hour when you downloaded it)
 * version of Unity3D (e.g. Unity 2017.1.4f1)
 
 **Describe the bug**
