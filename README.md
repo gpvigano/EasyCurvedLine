@@ -10,7 +10,7 @@ This is a project born from the [Easy Curved Line Renderer utility](https://foru
 
 **Also useful for rendering solid lines (e.g. wires, pipes, speech bubble tails...)**
 
- ![image](https://forum.unity.com/attachments/unity-2018-02-20-11-16-25-81-gif.267478/)
+ ![image](https://raw.githubusercontent.com/gpvigano/EasyCurvedLine/master/images/CurvedLine_animation.gif)
 
 *Animation in the included example scene*
 
@@ -32,7 +32,7 @@ Included:
   * normal maps to make curved lines look like their were solid
   * sample ready-to-use materials for lines (unlit and wires or pipes)
 
- ![image](https://forum.unity.com/attachments/curvedline001-png.177295/)
+ ![image](https://raw.githubusercontent.com/gpvigano/EasyCurvedLine/master/images/CurvedLine_Unity_edit.png)
 
 *Curved lines and their gizmos*
 
@@ -43,6 +43,16 @@ An example scene is provided to demonstrate different usages of the included ass
 
 To see how Easy Curved Line Renderer work,
 see `EasyCurvedLine` example scene in `Assets/EasyCurvedLine/Examples`.
+
+Context menus are added to Unity Editor to ease the creation of curved lines.
+* In Game Object menu (and in the Hierarchy view context menu) a new `Curved line` menu item is present in `Effects` sub-menu.
+* In Curved Line Renderer component there is a menu item for adding new line control points.
+* In Curved Line Point component there are menu items for adding new line control points.
+
+If you don't want this feature in your Editor you can simply delete the EasyCurvedLine/Scripts/Editor folder.
+
+You can find the Easy Curved Line Renderer reference documentation in `Documentation` folder
+both as [compressed HTML](https://github.com/gpvigano/EasyCurvedLine/blob/master/Documentation/EasyCurvedLine.chm) and [zipped HTML](https://github.com/gpvigano/EasyCurvedLine/blob/master/Documentation/EasyCurvedLine_html.zip).
 
 ### Acknowledgements:
 
@@ -55,7 +65,7 @@ Thanks in advance to all the people who contributed and will contribute in any w
 
 Contributions from you are welcome!
 
-If you find bugs or you have any new idea for improvements and new features you can raise an issue on GitHub (please follow the suggested template, filling the proper sections). To open issues or make pull requests please follow the instructions in [CONTRIBUTING.md](https://github.com/gpvigano/EasyCurvedLine/blob/master/CONTRIBUTING.md).
+If you find bugs or you have any new idea for improvements and new features you can create an issue on GitHub (please follow the suggested template, filling the proper sections). To open issues or make pull requests please follow the instructions in [CONTRIBUTING.md](https://github.com/gpvigano/EasyCurvedLine/blob/master/CONTRIBUTING.md).
 
 ### License
 
