@@ -17,37 +17,49 @@ namespace EasyCurvedLine
         /// </summary>
         [Tooltip("Size of line segments (in meters) used to approximate the curve")]
         public float lineSegmentSize = 0.15f;
+
         /// <summary>
         /// Thickness of the line (initial thickness if useCustomEndWidth is true).
         /// </summary>
         [Tooltip("Width of the line (initial width if useCustomEndWidth is true)")]
         public float lineWidth = 0.1f;
+
         /// <summary>
         /// Use a different thickness for the line end.
         /// </summary>
         [Tooltip("Enable this to set a custom width for the line end")]
         public bool useCustomEndWidth = false;
+
         /// <summary>
         /// Thickness of the line at its end point (initial thickness is lineWidth).
         /// </summary>
         [Tooltip("Custom width for the line end")]
         public float endWidth = 0.1f;
         [Header("Gizmos")]
+
         /// <summary>
         /// Show gizmos at control points in Unity Editor.
         /// </summary>
         [Tooltip("Show gizmos at control points.")]
         public bool showGizmos = true;
+
         /// <summary>
         /// Size of the gizmos of control points.
         /// </summary>
         [Tooltip("Size of the gizmos of control points.")]
         public float gizmoSize = 0.1f;
+
         /// <summary>
         /// Color for rendering the gizmos of control points.
         /// </summary>
         [Tooltip("Color for rendering the gizmos of control points.")]
         public Color gizmoColor = new Color(1, 0, 0, 0.5f);
+
+        /// <summary>
+        /// Automatically update the line.
+        /// </summary>
+        [Tooltip("Automatically update the line.")]
+        public bool autoUpdate = true;
 
         private CurvedLinePoint[] linePoints = new CurvedLinePoint[0];
         private Vector3[] linePositions = new Vector3[0];
@@ -66,7 +78,7 @@ namespace EasyCurvedLine
         /// <summary>
         /// Collect control points positions and update the line renderer.
         /// </summary>
-        public void Update()
+        public void UpdateLineRenderer()
         {
             GetPoints();
             SetPointsToLine();
@@ -79,15 +91,26 @@ namespace EasyCurvedLine
             lineRenderer = GetComponent<LineRenderer>();
         }
 
+        /// <summary>
+        /// Collect control points positions and update the line renderer.
+        /// </summary>
+        public void Update()
+        {
+            if (autoUpdate)
+            {
+                UpdateLineRenderer();
+            }
+        }
+
         private void GetPoints()
         {
             // find curved points in children
             // scan only the first hierarchy level to allow nested curved lines (like modelling a tree or a coral)
             List<CurvedLinePoint> curvedLinePoints = new List<CurvedLinePoint>();
-            for(int i=0; i<transform.childCount;i++)
+            for (int i = 0; i < transform.childCount; i++)
             {
                 CurvedLinePoint childPoint = transform.GetChild(i).GetComponent<CurvedLinePoint>();
-                if(childPoint!=null)
+                if (childPoint != null)
                 {
                     curvedLinePoints.Add(childPoint);
                 }
@@ -95,7 +118,10 @@ namespace EasyCurvedLine
             linePoints = curvedLinePoints.ToArray();
 
             //add positions
-            linePositions = new Vector3[linePoints.Length];
+            if (linePositions.Length != linePoints.Length)
+            {
+                linePositions = new Vector3[linePoints.Length];
+            }
             for (int i = 0; i < linePoints.Length; i++)
             {
                 linePositions[i] = linePoints[i].transform.position;
@@ -105,34 +131,40 @@ namespace EasyCurvedLine
 
         private void SetPointsToLine()
         {
-            //create old positions if they dont match
+            bool rebuild = false;
+
+            // create old positions if they don't match
             if (linePositionsOld.Length != linePositions.Length)
             {
                 linePositionsOld = new Vector3[linePositions.Length];
+                rebuild = true;
             }
-
-            //check if line points have moved
-            bool moved = false;
-            for (int i = 0; i < linePositions.Length; i++)
+            else
             {
-                //compare
-                if (linePositions[i] != linePositionsOld[i])
+                // check if line points have moved
+                for (int i = 0; i < linePositions.Length; i++)
                 {
-                    moved = true;
+                    //compare
+                    if (linePositions[i] != linePositionsOld[i])
+                    {
+                        rebuild = true;
+                        break;
+                    }
                 }
             }
 
-            //update if moved
-            if (moved == true)
+            // update if line points were modified
+            if (rebuild)
             {
-                if (lineRenderer==null)
+                linePositions.CopyTo(linePositionsOld, 0);
+                if (lineRenderer == null)
                 {
                     lineRenderer = GetComponent<LineRenderer>();
                 }
-                //get smoothed values
+                // get smoothed values
                 Vector3[] smoothedPoints = LineSmoother.SmoothLine(linePositions, lineSegmentSize);
 
-                //set line settings
+                // set line settings
                 lineRenderer.positionCount = smoothedPoints.Length;
                 lineRenderer.SetPositions(smoothedPoints);
                 lineRenderer.startWidth = lineWidth;
@@ -143,7 +175,7 @@ namespace EasyCurvedLine
 
         private void OnDrawGizmosSelected()
         {
-            Update();
+            UpdateLineRenderer();
         }
 
 
@@ -154,7 +186,7 @@ namespace EasyCurvedLine
                 GetPoints();
             }
 
-            //settings for gizmos
+            // settings for gizmos
             foreach (CurvedLinePoint linePoint in linePoints)
             {
                 linePoint.showGizmo = showGizmos;
@@ -165,7 +197,7 @@ namespace EasyCurvedLine
 
         private void UpdateMaterial()
         {
-            if (lineRenderer==null)
+            if (lineRenderer == null)
             {
                 lineRenderer = GetComponent<LineRenderer>();
             }

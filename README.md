@@ -19,7 +19,7 @@ Included:
 * scripts:
   * LineSmoother
     * main utility script for smoothing out positions
-    * static function so it can be accessed without being attached to a gameobject
+    * static function so it can be accessed without being attached to a game object
     * feed it an array of Vector3 and a segment size and you will get back a smoothed out array!
     * segment size is world space and so the number of line segments in between points adjusts based on distance between points
   * CurvedLineRenderer
@@ -73,7 +73,7 @@ Code released under the [MIT License](https://github.com/gpvigano/EasyCurvedLine
 
 
 ---
-To try this project with Unity go to the [repository page on GitHub](https://github.com/gpvigano/EasyCurvedLine) press the button **Clone or download** and choose [**Download ZIP**](https://github.com/gpvigano/EasyCurvedLine/archive/master.zip). Save and unzip the archive to your hard disk and then you can open it with Unity.
+For Windows users: to try this project with Unity go to the [repository page on GitHub](https://github.com/gpvigano/EasyCurvedLine) press the button **Clone or download** and choose [**Download ZIP**](https://github.com/gpvigano/EasyCurvedLine/archive/master.zip). Save and unzip the archive to your hard disk and then you can open it with Unity.
 
 [Easy Curved Line Renderer]: https://forum.unity.com/threads/easy-curved-line-renderer-free-utility.391219/#post-3654403
 
