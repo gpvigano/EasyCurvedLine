@@ -66,6 +66,10 @@ namespace EasyCurvedLine
         private Vector3[] linePositionsOld = new Vector3[0];
         private LineRenderer lineRenderer = null;
         private Material lineRendererMaterial = null;
+        private float oldLineWidth = 0.0f;
+        private float oldEndWidth = 0.1f;
+        private float oldLineRendererStartWidth = 0.0f;
+        private float oldLineRendererEndWidth = 0.0f;
 
         public CurvedLinePoint[] LinePoints
         {
@@ -131,6 +135,22 @@ namespace EasyCurvedLine
 
         private void SetPointsToLine()
         {
+            // if the start width was edited directly on the curve
+            if (oldLineWidth == lineWidth && oldLineRendererStartWidth != lineRenderer.startWidth)
+            {
+                lineWidth = lineRenderer.startWidth;
+            }
+
+            // if the end width was edited directly on the curve
+            if (oldEndWidth == endWidth && oldLineRendererEndWidth != lineRenderer.endWidth)
+            {
+                endWidth = lineRenderer.endWidth;
+                if (endWidth != lineWidth)
+                {
+                    useCustomEndWidth = true;
+                }
+            }
+
             float actualEndWidth = useCustomEndWidth ? endWidth : lineWidth;
 
             // rebuild the line if any parameter was changed
@@ -175,6 +195,11 @@ namespace EasyCurvedLine
                 lineRenderer.SetPositions(smoothedPoints);
                 lineRenderer.startWidth = lineWidth;
                 lineRenderer.endWidth = useCustomEndWidth ? endWidth : lineWidth;
+
+                oldLineWidth = lineWidth;
+                oldEndWidth = endWidth;
+                oldLineRendererStartWidth = lineRenderer.startWidth;
+                oldLineRendererEndWidth = lineRenderer.endWidth;
             }
         }
 
