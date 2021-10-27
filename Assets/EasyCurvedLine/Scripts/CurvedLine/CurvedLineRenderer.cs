@@ -131,24 +131,30 @@ namespace EasyCurvedLine
 
         private void SetPointsToLine()
         {
-            bool rebuild = false;
+            float actualEndWidth = useCustomEndWidth ? endWidth : lineWidth;
 
-            // create old positions if they don't match
-            if (linePositionsOld.Length != linePositions.Length)
+            // rebuild the line if any parameter was changed
+            bool rebuild = (lineRenderer.startWidth != lineWidth || lineRenderer.endWidth != actualEndWidth);
+
+            if (!rebuild)
             {
-                linePositionsOld = new Vector3[linePositions.Length];
-                rebuild = true;
-            }
-            else
-            {
-                // check if line points have moved
-                for (int i = 0; i < linePositions.Length; i++)
+                // create old positions if they don't match
+                if (linePositionsOld.Length != linePositions.Length)
                 {
-                    //compare
-                    if (linePositions[i] != linePositionsOld[i])
+                    linePositionsOld = new Vector3[linePositions.Length];
+                    rebuild = true;
+                }
+                else
+                {
+                    // check if line points have moved
+                    for (int i = 0; i < linePositions.Length; i++)
                     {
-                        rebuild = true;
-                        break;
+                        //compare
+                        if (linePositions[i] != linePositionsOld[i])
+                        {
+                            rebuild = true;
+                            break;
+                        }
                     }
                 }
             }
