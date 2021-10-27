@@ -35,6 +35,19 @@ namespace EasyCurvedLine
         /// </summary>
         [Tooltip("Custom width for the line end")]
         public float endWidth = 0.1f;
+
+        /// <summary>
+        /// Automatically update the line.
+        /// </summary>
+        [Tooltip("Automatically update the line.")]
+        public bool autoUpdate = true;
+
+        /// <summary>
+        /// Allow editing width directly on curve graph.
+        /// </summary>
+        [Tooltip("Allow editing width directly on curve graph.")]
+        public bool allowWidthEditOnCurveGraph = true;
+
         [Header("Gizmos")]
 
         /// <summary>
@@ -55,21 +68,17 @@ namespace EasyCurvedLine
         [Tooltip("Color for rendering the gizmos of control points.")]
         public Color gizmoColor = new Color(1, 0, 0, 0.5f);
 
-        /// <summary>
-        /// Automatically update the line.
-        /// </summary>
-        [Tooltip("Automatically update the line.")]
-        public bool autoUpdate = true;
-
         private CurvedLinePoint[] linePoints = new CurvedLinePoint[0];
         private Vector3[] linePositions = new Vector3[0];
         private Vector3[] linePositionsOld = new Vector3[0];
         private LineRenderer lineRenderer = null;
         private Material lineRendererMaterial = null;
+
         private float oldLineWidth = 0.0f;
-        private float oldEndWidth = 0.1f;
+        private float oldEndWidth = 0.0f;
         private float oldLineRendererStartWidth = 0.0f;
         private float oldLineRendererEndWidth = 0.0f;
+
 
         public CurvedLinePoint[] LinePoints
         {
@@ -78,6 +87,7 @@ namespace EasyCurvedLine
                 return linePoints;
             }
         }
+
 
         /// <summary>
         /// Collect control points positions and update the line renderer.
@@ -95,6 +105,7 @@ namespace EasyCurvedLine
             lineRenderer = GetComponent<LineRenderer>();
         }
 
+
         /// <summary>
         /// Collect control points positions and update the line renderer.
         /// </summary>
@@ -105,6 +116,7 @@ namespace EasyCurvedLine
                 UpdateLineRenderer();
             }
         }
+
 
         private void GetPoints()
         {
@@ -135,19 +147,22 @@ namespace EasyCurvedLine
 
         private void SetPointsToLine()
         {
-            // if the start width was edited directly on the curve
-            if (oldLineWidth == lineWidth && oldLineRendererStartWidth != lineRenderer.startWidth)
+            if (allowWidthEditOnCurveGraph)
             {
-                lineWidth = lineRenderer.startWidth;
-            }
-
-            // if the end width was edited directly on the curve
-            if (oldEndWidth == endWidth && oldLineRendererEndWidth != lineRenderer.endWidth)
-            {
-                endWidth = lineRenderer.endWidth;
-                if (endWidth != lineWidth)
+                // if the start width was edited directly on the curve
+                if (oldLineWidth == lineWidth && oldLineRendererStartWidth != lineRenderer.startWidth)
                 {
-                    useCustomEndWidth = true;
+                    lineWidth = lineRenderer.startWidth;
+                }
+
+                // if the end width was edited directly on the curve
+                if (oldEndWidth == endWidth && oldLineRendererEndWidth != lineRenderer.endWidth)
+                {
+                    endWidth = lineRenderer.endWidth;
+                    if (endWidth != lineWidth)
+                    {
+                        useCustomEndWidth = true;
+                    }
                 }
             }
 
@@ -187,6 +202,7 @@ namespace EasyCurvedLine
                 {
                     lineRenderer = GetComponent<LineRenderer>();
                 }
+
                 // get smoothed values
                 Vector3[] smoothedPoints = LineSmoother.SmoothLine(linePositions, lineSegmentSize);
 
@@ -225,6 +241,7 @@ namespace EasyCurvedLine
                 linePoint.gizmoColor = gizmoColor;
             }
         }
+
 
         private void UpdateMaterial()
         {
